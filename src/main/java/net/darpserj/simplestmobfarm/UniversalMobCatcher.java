@@ -3,6 +3,7 @@ package net.darpserj.simplestmobfarm;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,7 +32,7 @@ public class UniversalMobCatcher extends Item {
 
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-        if(user.isPlayer() && !entity.isPlayer() ){
+        if(user.isPlayer() && !entity.isPlayer() && entity instanceof MobEntity){
 
             ItemStack stackInHand = user.getStackInHand(hand);
             NbtCompound nbt = stackInHand.getOrCreateNbt();
