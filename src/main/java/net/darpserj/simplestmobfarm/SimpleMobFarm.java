@@ -5,6 +5,9 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
@@ -20,18 +23,21 @@ public class SimpleMobFarm implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	public static final Item UNIVERSAL_MOB_CATCHER = new UniversalMobCatcher(new FabricItemSettings().maxCount(1));
+	public static final Block UNIVERSAL_MOB_FARM = new UniversalMobFarm(FabricBlockSettings.create().luminance(15).nonOpaque());
 	public static final ItemGroup SIMPLE_MOB_FARM_GROUP = FabricItemGroup.builder().displayName(Text.of("Simple Mob Farm")).build();
+
 	public static final RegistryKey<ItemGroup> SIMPLE_MOB_FARM_GROUP_KEY = RegistryKey.of(Registries.ITEM_GROUP.getKey(), new Identifier(MOD_ID, "item_group"));
 
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Hello Fabric world!");
-
+		Registry.register(Registries.BLOCK, new Identifier(MOD_ID, "universal_mob_farm"), UNIVERSAL_MOB_FARM);
+		Registry.register(Registries.ITEM, new Identifier(MOD_ID, "universal_mob_farm"), new BlockItem(UNIVERSAL_MOB_FARM, new FabricItemSettings()));
 		Registry.register(Registries.ITEM, new Identifier(MOD_ID, "universal_mob_catcher"), UNIVERSAL_MOB_CATCHER);
-
 		Registry.register(Registries.ITEM_GROUP, SIMPLE_MOB_FARM_GROUP_KEY, SIMPLE_MOB_FARM_GROUP);
 		ItemGroupEvents.modifyEntriesEvent(SIMPLE_MOB_FARM_GROUP_KEY).register((items) -> {
 			items.add(UNIVERSAL_MOB_CATCHER);
+			items.add(UNIVERSAL_MOB_FARM.asItem());
 		});
 
 	}
